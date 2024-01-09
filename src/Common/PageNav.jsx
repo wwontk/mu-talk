@@ -17,6 +17,7 @@ const PageNav = () => {
   });
   const handleLogout = () => {
     auth.signOut();
+    alert("로그아웃 하였습니다!");
   };
   return (
     <MenuNav>
@@ -27,7 +28,9 @@ const PageNav = () => {
           <Link to="/login">로그인</Link>
         )}
       </MenuItem>
-      <MenuItem>마이페이지</MenuItem>
+      <MenuItem>
+        <Link to="/mypage">마이페이지</Link>
+      </MenuItem>
     </MenuNav>
   );
 };

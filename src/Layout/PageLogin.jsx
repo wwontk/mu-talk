@@ -1,11 +1,12 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "../firebase";
 import { useState } from "react";
 
 const PageLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const onChange = (event) => {
     const {
@@ -23,6 +24,7 @@ const PageLogin = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("로그인 성공!");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

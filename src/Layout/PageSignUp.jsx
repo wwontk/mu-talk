@@ -2,12 +2,14 @@ import styled from "@emotion/styled";
 import { auth, createUserWithEmailAndPassword } from "../firebase";
 import { useState } from "react";
 import { updateProfile } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const PageSignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCk, setPasswordCk] = useState("");
   const [nickname, setNickname] = useState("");
+  const navigate = useNavigate();
 
   const onChange = (event) => {
     const {
@@ -37,6 +39,7 @@ const PageSignUp = () => {
       })
         .then(() => {
           console.log("Profile created!");
+          navigate("/");
         })
         .catch((error) => {
           console.log(error);
