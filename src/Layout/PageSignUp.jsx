@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
 import { auth, createUserWithEmailAndPassword } from "../firebase";
 import { useState } from "react";
+import { updateProfile } from "firebase/auth";
 
 const PageSignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordCk, setPasswordCk] = useState("");
+  const [nickname, setNickname] = useState("");
 
   const onChange = (event) => {
     const {
@@ -14,16 +17,30 @@ const PageSignUp = () => {
       setEmail(value);
     } else if (name === "password") {
       setPassword(value);
+    } else if (name === "passwordCk") {
+      setPasswordCk(value);
+    } else if (name === "nickname") {
+      setNickname(value);
     }
   };
 
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      let data;
-      data = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(data);
-      alert("뮤톡의 회원이 되어주셔서 감사합니다!");
+      if (password !== passwordCk) {
+        console.log("비밀번호가 다릅니다."); //TODO: 화면에 에러메시지 표시
+        return;
+      }
+      await createUserWithEmailAndPassword(auth, email, password);
+      updateProfile(auth.currentUser, {
+        displayName: nickname,
+      })
+        .then(() => {
+          console.log("Profile updated!");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -52,11 +69,21 @@ const PageSignUp = () => {
         </InputWrap>
         <InputWrap>
           <LabelTxt>비밀번호 확인</LabelTxt>
-          <Input type="password"></Input>
+          <Input
+            name="passwordCk"
+            type="password"
+            value={passwordCk}
+            onChange={onChange}
+          ></Input>
         </InputWrap>
         <InputWrap>
           <LabelTxt>닉네임</LabelTxt>
-          <Input type="text"></Input>
+          <Input
+            name="nickname"
+            type="text"
+            value={nickname}
+            onChange={onChange}
+          ></Input>
         </InputWrap>
         <Button>회원가입</Button>
       </LoginForm>
