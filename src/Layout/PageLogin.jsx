@@ -21,9 +21,7 @@ const PageLogin = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      let data;
-      data = await signInWithEmailAndPassword(auth, email, password);
-      console.log(data);
+      await signInWithEmailAndPassword(auth, email, password);
       alert("로그인 성공!");
     } catch (error) {
       console.log(error);

@@ -36,7 +36,7 @@ const PageSignUp = () => {
         displayName: nickname,
       })
         .then(() => {
-          console.log("Profile updated!");
+          console.log("Profile created!");
         })
         .catch((error) => {
           console.log(error);
