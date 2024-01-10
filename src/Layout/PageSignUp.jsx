@@ -9,6 +9,7 @@ const PageSignUp = () => {
   const [password, setPassword] = useState("");
   const [passwordCk, setPasswordCk] = useState("");
   const [nickname, setNickname] = useState("");
+  const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
 
   const onChange = (event) => {
@@ -30,7 +31,7 @@ const PageSignUp = () => {
     event.preventDefault();
     try {
       if (password !== passwordCk) {
-        console.log("비밀번호가 다릅니다."); //TODO: 화면에 에러메시지 표시
+        setErrMsg("비밀번호를 확인해주세요!");
         return;
       }
       await createUserWithEmailAndPassword(auth, email, password);
@@ -39,6 +40,7 @@ const PageSignUp = () => {
       })
         .then(() => {
           console.log("Profile created!");
+          alert("회원가입이 성공적으로 완료되었습니다!");
           navigate("/");
         })
         .catch((error) => {
@@ -46,6 +48,15 @@ const PageSignUp = () => {
         });
     } catch (error) {
       console.log(error);
+      // eslint-disable-next-line default-case
+      switch (error.code) {
+        case "auth/weak-password":
+          setErrMsg("비밀번호는 6자리 이상이어야 합니다.");
+          break;
+        case "auth/email-already-in-use":
+          setErrMsg("이미 존재하는 이메일 입니다.");
+          break;
+      }
     }
   };
 
@@ -88,6 +99,7 @@ const PageSignUp = () => {
             onChange={onChange}
           ></Input>
         </InputWrap>
+        <ErrMsg>{errMsg}</ErrMsg>
         <Button>회원가입</Button>
       </LoginForm>
     </>
@@ -117,6 +129,10 @@ const Input = styled.input`
   flex: 1;
   border: 1px solid #000;
   outline: none;
+`;
+
+const ErrMsg = styled.div`
+  color: red;
 `;
 
 const Button = styled.button`
