@@ -6,6 +6,7 @@ import { useState } from "react";
 const PageLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
 
   const onChange = (event) => {
@@ -26,7 +27,7 @@ const PageLogin = () => {
       alert("로그인 성공!");
       navigate("/");
     } catch (error) {
-      console.log(error);
+      setErrMsg("등록되지 않은 이메일이거나, 잘못된 비밀번호 입니다.");
     }
   };
   return (
@@ -50,6 +51,7 @@ const PageLogin = () => {
             onChange={onChange}
           ></Input>
         </InputWrap>
+        <ErrMsg>{errMsg}</ErrMsg>
         <Button>로그인</Button>
         <Link to="/signup">
           <Button>회원가입</Button>
@@ -93,6 +95,10 @@ const Button = styled.button`
   cursor: pointer;
 
   font-weight: 600;
+`;
+
+const ErrMsg = styled.div`
+  color: red;
 `;
 
 export default PageLogin;
