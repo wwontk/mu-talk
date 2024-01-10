@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 
 const PageNav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -19,6 +20,10 @@ const PageNav = () => {
     auth.signOut();
     alert("로그아웃 하였습니다!");
   };
+  const handleToLogin = () => {
+    alert("로그인을 진행해주세요!");
+    navigate("/login");
+  };
   return (
     <MenuNav>
       <MenuItem>
@@ -29,7 +34,11 @@ const PageNav = () => {
         )}
       </MenuItem>
       <MenuItem>
-        <Link to="/mypage">마이페이지</Link>
+        {isLoggedIn ? (
+          <Link to="/mypage">마이페이지</Link>
+        ) : (
+          <span onClick={handleToLogin}>마이페이지</span>
+        )}
       </MenuItem>
     </MenuNav>
   );
@@ -41,7 +50,7 @@ const MenuNav = styled.nav`
   justify-content: flex-end;
 
   // width: 800px;
-  padding: 1rem 4rem;
+  padding: 1rem 0;
   margin: 0 auto;
 `;
 
