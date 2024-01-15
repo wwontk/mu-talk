@@ -1,11 +1,38 @@
 import styled from "@emotion/styled";
+import { Link, useParams } from "react-router-dom";
+import BoardPostRow from "../Component/BoardPostRow";
+import { db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 const PageBoard = () => {
+  const { name } = useParams();
+  const [postData, setPostData] = useState([]);
+
+  const postsPath = `boards/${name}/post`;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, postsPath));
+        const postArray = querySnapshot.docs.map((doc) => doc.data());
+
+        setPostData(postArray);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [postsPath]);
+
   return (
     <>
       <BoardHeader>
-        <Title>마리퀴리</Title>
-        <WriteButton>글쓰기</WriteButton>
+        <Title>{name}</Title>
+        <WriteButton>
+          <Link to="posting">글쓰기</Link>
+        </WriteButton>
       </BoardHeader>
       <hr></hr>
       <div>
@@ -22,28 +49,22 @@ const PageBoard = () => {
         </Table>
       </div>
       <ItemWrap>
-        <h2>마리퀴리 뮤톡🎶</h2>
+        <h2>{`${name} 뮤톡🎶`}</h2>
         <Table>
           <tr>
             <PostTitle>제목</PostTitle>
             <PostTitle>작성자</PostTitle>
             <th>작성일</th>
           </tr>
-          <tr>
-            <td>마리퀴리 너무 재밌다ㅋㅋ</td>
-            <td>마리짱</td>
-            <DateTd>2024/01/04</DateTd>
-          </tr>
-          <tr>
-            <td>안느 배우들 연기 왜이렇게 잘해?</td>
-            <td>안느짱</td>
-            <DateTd>2024/01/04</DateTd>
-          </tr>
-          <tr>
-            <td>피에르 마리 예측맆 너무 슬픈거 아니냐ㅠㅠㅠ</td>
-            <td>피에르짱</td>
-            <DateTd>2024/01/03</DateTd>
-          </tr>
+          {postData.length > 0
+            ? postData.map((post, index) => (
+                <BoardPostRow
+                  key={index}
+                  title={post.title}
+                  writer={post.writer}
+                />
+              ))
+            : ""}
         </Table>
       </ItemWrap>
     </>
