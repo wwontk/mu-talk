@@ -2,14 +2,15 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { useParams } from "react-router-dom";
 
 const PagePosting = () => {
+  const { name } = useParams();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [boardname, setBoardname] = useState("");
   const [nickname, setNickname] = useState("");
   const [useruid, setUseruid] = useState("");
-  const postPath = `boards/${boardname}/post`;
+  const postPath = `boards/${name}/post`;
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -30,10 +31,6 @@ const PagePosting = () => {
     }
   };
 
-  const handleSelected = (e) => {
-    setBoardname(e.target.value);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     await addDoc(collection(db, postPath), {
@@ -51,15 +48,6 @@ const PagePosting = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <SelectBoard
-          name="boardname"
-          onChange={handleSelected}
-          value={boardname}
-        >
-          <option>마리퀴리</option>
-          <option>아트</option>
-          <option>어쩌면 해피엔딩</option>
-        </SelectBoard>
         {/* <label for="notice">공지</label>
         <input type="checkbox" name="" id="notice" /> */}
         <TitleInput
@@ -82,16 +70,6 @@ const PagePosting = () => {
     </>
   );
 };
-
-const SelectBoard = styled.select`
-  padding: 0.5rem;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
-  border: 1px solid #c0c0c0;
-  &:focus {
-    outline: none;
-  }
-`;
 
 const TitleInput = styled.input`
   box-sizing: border-box;
