@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "../firebase";
 import { useState } from "react";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const PageLogin = () => {
   const [email, setEmail] = useState("");
@@ -30,6 +31,18 @@ const PageLogin = () => {
       setErrMsg("등록되지 않은 이메일이거나, 잘못된 비밀번호 입니다.");
     }
   };
+
+  const handleGoogleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((data) => {
+        alert("회원가입이 완료되었습니다.");
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <LoginForm onSubmit={onSubmit}>
@@ -56,6 +69,9 @@ const PageLogin = () => {
         <Link to="/signup">
           <Button>회원가입</Button>
         </Link>
+        <button type="button" onClick={handleGoogleLogin}>
+          구글 로그인
+        </button>
       </LoginForm>
     </>
   );
