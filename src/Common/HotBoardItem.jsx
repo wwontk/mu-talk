@@ -6,13 +6,15 @@ const HotBoardItem = (props) => {
   const handleClickHotBoard = () => {
     navigate(`/board/${props.name}`);
   };
-  const imageUrl =
-    "https://ticketimage.interpark.com/Play/image/large/23/23013541_p.gif";
 
   return (
     <>
       <Item>
-        <Img src={imageUrl} alt="마리퀴리" onClick={handleClickHotBoard}></Img>
+        <Img
+          src={props.imgurl}
+          alt="마리퀴리"
+          onClick={handleClickHotBoard}
+        ></Img>
         <Title onClick={handleClickHotBoard}>{props.name}</Title>
       </Item>
     </>
@@ -32,6 +34,7 @@ const Item = styled.li`
 
 const Img = styled.img`
   width: 100%;
+  height: 240px;
   cursor: pointer;
 `;
 
