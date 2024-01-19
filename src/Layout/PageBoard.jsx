@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Link, useParams } from "react-router-dom";
 import BoardPostRow from "../Component/BoardPostRow";
 import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 const PageBoard = () => {
@@ -12,27 +12,23 @@ const PageBoard = () => {
   const postsPath = `boards/${name}/post`;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, postsPath));
-        const postArray = querySnapshot.docs.map((doc) => doc.data());
-
-        setPostData(postArray);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
+    const q = query(collection(db, postsPath), orderBy("date", "desc"));
+    onSnapshot(q, (snapshot) => {
+      const postArray = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+      setPostData(postArray);
+    });
   }, [postsPath]);
 
   return (
     <>
       <BoardHeader>
         <Title>{name}</Title>
-        <WriteButton>
-          <Link to="posting">글쓰기</Link>
-        </WriteButton>
+        <Link to="posting">
+          <WriteButton>글쓰기</WriteButton>
+        </Link>
       </BoardHeader>
       <hr></hr>
       <div>
@@ -60,8 +56,9 @@ const PageBoard = () => {
             ? postData.map((post, index) => (
                 <BoardPostRow
                   key={index}
-                  title={post.title}
-                  writer={post.writer}
+                  postdata={post.data}
+                  postid={post.id}
+                  postdate={post.data.date}
                 />
               ))
             : ""}
