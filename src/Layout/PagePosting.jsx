@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PagePosting = () => {
   const { name } = useParams();
@@ -11,6 +11,7 @@ const PagePosting = () => {
   const [nickname, setNickname] = useState("");
   const [useruid, setUseruid] = useState("");
   const postPath = `boards/${name}/post`;
+  const navigate = useNavigate();
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -38,13 +39,16 @@ const PagePosting = () => {
       text: text,
       writer: nickname,
       userid: useruid,
-      date: new Date(),
+      date: serverTimestamp(),
     });
+    alert("게시글이 등록되었습니다!");
+    navigate(`/board/${name}`);
   };
 
-  const handleClickPost = () => {
-    alert("게시글이 등록되었습니다!");
+  const handleCancelButton = () => {
+    navigate(`/board/${name}`);
   };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -64,8 +68,10 @@ const PagePosting = () => {
           placeholder="내용을 입력해주세요"
           onChange={handleChange}
         />
-        <Button onClick={handleClickPost}>작성</Button>
-        <Button type="button">취소</Button>
+        <Button>작성</Button>
+        <Button type="button" onClick={handleCancelButton}>
+          취소
+        </Button>
       </form>
     </>
   );
