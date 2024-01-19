@@ -1,64 +1,119 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { useEffect, useState } from "react";
+import CommentCreate from "../Component/CommentCreate";
+import CommentReadBox from "../Component/CommentReadBox";
 
 const PageShowPost = () => {
   const { name, postno } = useParams();
-  const postsPath = `boards/${name}/post/${postno}`;
+
+  const postPath = `boards/${name}/post/${postno}`;
   const [postData, setPostData] = useState([]);
-  const [userId, setUserId] = useState("");
+  const [userData, setUserData] = useState([]);
+  const [date, setDate] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const docRef = doc(db, postsPath);
-        const docSnap = await getDoc(docRef);
-        setPostData(docSnap.data());
-      } catch (error) {
-        console.log(error);
-      }
+    const FetchPostData = async () => {
+      const docRef = doc(db, postPath);
+      const docSnap = await getDoc(docRef);
+      const postDataArray = docSnap.data();
+      setPostData(postDataArray);
+      setDate(postDataArray.date);
     };
-    fetchData();
-  });
+    FetchPostData();
+  }, [postPath]);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        setUserId(user.uid);
+        setUserData(user);
       }
     });
   }, []);
+
+  const handleDeleteButton = async () => {
+    const confirm = window.confirm("게시글을 삭제하시겠습니까?");
+    if (confirm) {
+      await deleteDoc(doc(db, postPath));
+      alert("삭제 되었습니다.");
+      navigate(`/board/${name}`);
+    }
+  };
+
+  const TimestampDate = () => {
+    if (date) {
+      const datet = date.toDate();
+      const formattedDate = new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false, // 24-hour time format
+      }).format(datet);
+
+      const parts = formattedDate.split(/\D+/);
+      const result = `${parts[2]}/${parts[0]}/${parts[1]} ${parts[3]}:${parts[4]}:${parts[5]}`;
+      return result;
+    }
+  };
+
+  const datestring = TimestampDate();
 
   return (
     <>
       <BoardHeader>
         <Title>{`${name} 뮤톡🎶`}</Title>
-        <WriteButton>
-          <Link to={`/board/${name}/posting`}>글쓰기</Link>
-        </WriteButton>
+        <div>
+          <Link to={`/board/${name}`}>
+            <HeaderButton>목록</HeaderButton>
+          </Link>
+          <Link to={`/board/${name}/posting`}>
+            <HeaderButton>글쓰기</HeaderButton>
+          </Link>
+        </div>
       </BoardHeader>
+
       <hr></hr>
+
       <PostWrap>
         <PostHeader>
           <PostTitle>{postData.title}</PostTitle>
-          <PostInfo>{`${postData.writer} | 2024/01/04 15:30:33`}</PostInfo>
+          <PostInfo>{`${postData.writer} | ${
+            date ? datestring : ""
+          }`}</PostInfo>
         </PostHeader>
-        {userId === postData.userid ? (
+        {/* 본인이 쓴 글일 경우 수정/삭제 버튼 */}
+        {postData.userid === userData.uid ? (
           <>
-            <Button>수정</Button>
-            <Button>삭제</Button>
+            <Button>
+              <Link
+                to={`/board/${name}/${postno}/update`}
+                state={{
+                  postData,
+                }}
+              >
+                수정
+              </Link>
+            </Button>
+            <Button onClick={handleDeleteButton}>삭제</Button>
           </>
         ) : (
           ""
         )}
-
         <PostTxtArea>{postData.text}</PostTxtArea>
       </PostWrap>
-      <CommentArea>
-        <div>댓글 3</div>
-      </CommentArea>
+
+      {/* 댓글 불러오기 */}
+      <CommentReadBox />
+
+      {/* 댓글 달기 */}
+      <CommentCreate />
     </>
   );
 };
@@ -77,9 +132,10 @@ const Title = styled.h2`
   font-size: 1.8rem;
 `;
 
-const WriteButton = styled.button`
+const HeaderButton = styled.button`
   width: 80px;
   height: 30px;
+  margin-left: 0.5rem;
   border: 1px solid #000;
   background-color: #fff;
   cursor: pointer;
@@ -107,14 +163,6 @@ const Button = styled.button`
 
 const PostTxtArea = styled.div`
   margin: 2.5rem 0;
-`;
-
-const CommentArea = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-
-  padding: 1rem;
-  background-color: #f9f9f9;
 `;
 
 export default PageShowPost;
