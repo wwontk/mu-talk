@@ -154,6 +154,8 @@ const UDButton = styled.button`
 `;
 
 const DateTd = styled.td`
+  width: 135px;
+
   font-size: 0.85rem;
   color: #c0c0c0;
 `;
