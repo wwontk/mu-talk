@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import CommentReadBox from "../Component/CommentReadBox";
 
 const PageShowPost = () => {
   const { name, postno } = useParams();
+  const location = useLocation();
+  const isNotice = location.state.isnotice;
 
   const postPath = `boards/${name}/post/${postno}`;
   const [postData, setPostData] = useState([]);
@@ -68,7 +70,7 @@ const PageShowPost = () => {
   return (
     <>
       <BoardHeader>
-        <Title>{`${name} 뮤톡🎶`}</Title>
+        <Title>{isNotice ? `공지사항📢` : `${name} 뮤톡🎶`}</Title>
         <div>
           <Link to={`/board/${name}`}>
             <HeaderButton>목록</HeaderButton>

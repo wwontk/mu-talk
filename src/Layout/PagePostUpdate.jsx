@@ -7,7 +7,7 @@ import { db } from "../firebase";
 const PagePostUpdate = () => {
   const location = useLocation();
   const data = location.state.postData;
-  const { text, title } = data;
+  const { text, title, isnotice } = data;
   const [editdata, setEditdata] = useState({
     text,
     title,
@@ -25,7 +25,9 @@ const PagePostUpdate = () => {
   };
 
   const handleCancelButton = () => {
-    navigate(`/board/${name}/${postno}`);
+    navigate(`/board/${name}/${postno}`, {
+      state: { isnotice },
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -37,7 +39,9 @@ const PagePostUpdate = () => {
     const ref = doc(db, postPath);
     await updateDoc(ref, editInfo);
     alert("수정되었습니다.");
-    navigate(`/board/${name}/${postno}`);
+    navigate(`/board/${name}/${postno}`, {
+      state: { isnotice },
+    });
   };
 
   return (

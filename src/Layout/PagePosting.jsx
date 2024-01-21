@@ -10,6 +10,7 @@ const PagePosting = () => {
   const [text, setText] = useState("");
   const [nickname, setNickname] = useState("");
   const [useruid, setUseruid] = useState("");
+  const [isNotice, setIsNotice] = useState(false);
   const postPath = `boards/${name}/post`;
   const navigate = useNavigate();
 
@@ -21,6 +22,7 @@ const PagePosting = () => {
       }
     });
   });
+
   const handleChange = (event) => {
     const {
       target: { name, value },
@@ -32,6 +34,10 @@ const PagePosting = () => {
     }
   };
 
+  const handleCheckChange = () => {
+    setIsNotice(!isNotice);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     await addDoc(collection(db, postPath), {
@@ -40,6 +46,7 @@ const PagePosting = () => {
       writer: nickname,
       userid: useruid,
       date: serverTimestamp(),
+      isnotice: isNotice,
     });
     alert("게시글이 등록되었습니다!");
     navigate(`/board/${name}`);
@@ -52,8 +59,13 @@ const PagePosting = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {/* <label for="notice">공지</label>
-        <input type="checkbox" name="" id="notice" /> */}
+        <label for="notice">공지</label>
+        <input
+          type="checkbox"
+          name="notice"
+          id="notice"
+          onChange={handleCheckChange}
+        />
         <TitleInput
           name="title"
           type="text"
