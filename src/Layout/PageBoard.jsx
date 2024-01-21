@@ -2,18 +2,45 @@ import styled from "@emotion/styled";
 import { Link, useParams } from "react-router-dom";
 import BoardPostRow from "../Component/BoardPostRow";
 import { db } from "../firebase";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
+import BoardNoticeRow from "../Component/BoardNoticeRow";
 
 const PageBoard = () => {
   const { name } = useParams();
   const [postData, setPostData] = useState([]);
+  const [noticeData, setNoticeData] = useState([]);
 
   const postsPath = `boards/${name}/post`;
 
   useEffect(() => {
-    const q = query(collection(db, postsPath), orderBy("date", "desc"));
-    onSnapshot(q, (snapshot) => {
+    const noticequery = query(
+      collection(db, postsPath),
+      where("isnotice", "==", true),
+      orderBy("date", "desc")
+    );
+    onSnapshot(noticequery, (snapshot) => {
+      const noticeArray = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+      setNoticeData(noticeArray);
+    });
+  }, [postsPath]);
+
+  useEffect(() => {
+    const postquery = query(
+      collection(db, postsPath),
+      where("isnotice", "==", false),
+      orderBy("date", "desc")
+    );
+    onSnapshot(postquery, (snapshot) => {
       const postArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         data: doc.data(),
@@ -34,14 +61,15 @@ const PageBoard = () => {
       <div>
         <h2>공지사항📢</h2>
         <Table>
-          <tr>
-            <td>서울공연 마지막 티켓오픈 안내</td>
-            <DateTd>2024/01/04</DateTd>
-          </tr>
-          <tr>
-            <td>금일 공연 캐스팅 변경 안내</td>
-            <DateTd>2024/01/03</DateTd>
-          </tr>
+          {noticeData.length > 0
+            ? noticeData.map((notice, index) => (
+                <BoardNoticeRow
+                  key={index}
+                  notice={notice.data}
+                  noticeid={notice.id}
+                />
+              ))
+            : ""}
         </Table>
       </div>
       <ItemWrap>
@@ -96,12 +124,6 @@ const ItemWrap = styled.div`
 
 const Table = styled.table`
   width: 100%;
-`;
-
-const DateTd = styled.td`
-  width: 100px;
-  text-align: right;
-  color: #c0c0c0;
 `;
 
 const PostTitle = styled.th`
