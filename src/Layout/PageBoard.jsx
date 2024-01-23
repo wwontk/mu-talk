@@ -34,20 +34,20 @@ const PageBoard = () => {
     });
   }, [postsPath]);
 
-  useEffect(() => {
-    const postquery = query(
-      collection(db, postsPath),
-      where("isnotice", "==", false),
-      orderBy("date", "desc")
-    );
-    onSnapshot(postquery, (snapshot) => {
-      const postArray = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        data: doc.data(),
-      }));
-      setPostData(postArray);
-    });
-  }, [postsPath]);
+  // useEffect(() => {
+  //   const postquery = query(
+  //     collection(db, postsPath),
+  //     where("isnotice", "==", false),
+  //     orderBy("date", "desc")
+  //   );
+  //   onSnapshot(postquery, (snapshot) => {
+  //     const postArray = snapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       data: doc.data(),
+  //     }));
+  //     setPostData(postArray);
+  //   });
+  // }, [postsPath]);
 
   return (
     <>
