@@ -91,6 +91,11 @@ const PageBoard = () => {
               ))
             : ""}
         </Table>
+        <ButtonWrap>
+          <Button></Button>
+          <div>블라</div>
+          <Button></Button>
+        </ButtonWrap>
       </ItemWrap>
     </>
   );
@@ -128,6 +133,25 @@ const Table = styled.table`
 
 const PostTitle = styled.th`
   text-align: left;
+`;
+
+const ButtonWrap = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Button = styled.button`
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  border: 1px solid #c0c0c0;
+  cursor: pointer;
+  background-color: #fff;
+  &:hover {
+    background-color: #e0e0e0;
+  }
 `;
 
 export default PageBoard;
