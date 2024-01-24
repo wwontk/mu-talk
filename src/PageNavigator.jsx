@@ -8,6 +8,7 @@ import PagePosting from "./Layout/PagePosting";
 import PageShowPost from "./Layout/PageShowPost";
 import PagePostUpdate from "./Layout/PagePostUpdate";
 import PageList from "./Layout/PageList";
+import PageCreateBoard from "./Layout/PageCreateBoard";
 
 const PageNavigator = () => {
   return (
@@ -24,6 +25,7 @@ const PageNavigator = () => {
         element={<PagePostUpdate />}
       ></Route>
       <Route path="/boardlist" element={<PageList />}></Route>
+      <Route path="/boardcreate" element={<PageCreateBoard />}></Route>
     </Routes>
   );
 };
