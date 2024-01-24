@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, increment, updateDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 
 const CommentItem = (props) => {
@@ -15,6 +15,8 @@ const CommentItem = (props) => {
     userid,
     writer,
   });
+
+  const postPath = `boards/${name}/post/${postno}`;
   const commentPath = `boards/${name}/post/${postno}/comment/${id}`;
 
   useEffect(() => {
@@ -51,6 +53,10 @@ const CommentItem = (props) => {
     const confirm = window.confirm("댓글을 삭제하시겠습니까?");
     if (confirm) {
       await deleteDoc(doc(db, commentPath));
+      const ref = doc(db, postPath);
+      await updateDoc(ref, {
+        commentnum: increment(-1),
+      });
     }
   };
 
