@@ -1,20 +1,34 @@
 import styled from "@emotion/styled";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  increment,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useEffect, useState } from "react";
 import CommentCreate from "../Component/CommentCreate";
 import CommentReadBox from "../Component/CommentReadBox";
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import { Viewer } from "@toast-ui/react-editor";
 
 const PageShowPost = () => {
   const { name, postno } = useParams();
   const location = useLocation();
   const isNotice = location.state.isnotice;
 
+  const boardPath = `boards/${name}`;
   const postPath = `boards/${name}/post/${postno}`;
   const [postData, setPostData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [date, setDate] = useState(null);
+  const [allPostPath, setAllPostPath] = useState("");
 
   const navigate = useNavigate();
 
@@ -37,10 +51,29 @@ const PageShowPost = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (postData.userid && postData.date) {
+      const allquery = query(
+        collection(db, "AllPost"),
+        where("userid", "==", postData.userid),
+        where("date", "==", postData.date)
+      );
+      onSnapshot(allquery, (snapshot) => {
+        const allArray = snapshot.docs.map((doc) => doc.id);
+        setAllPostPath(`AllPost/${allArray}`);
+      });
+    }
+  }, [postData.date, postData.userid]);
+
   const handleDeleteButton = async () => {
     const confirm = window.confirm("게시글을 삭제하시겠습니까?");
     if (confirm) {
       await deleteDoc(doc(db, postPath));
+      await deleteDoc(doc(db, allPostPath));
+      const ref = doc(db, boardPath);
+      await updateDoc(ref, {
+        postnum: increment(-1),
+      });
       alert("삭제 되었습니다.");
       navigate(`/board/${name}`);
     }
@@ -108,7 +141,9 @@ const PageShowPost = () => {
         ) : (
           ""
         )}
-        <PostTxtArea>{postData.text}</PostTxtArea>
+        <PostTxtArea>
+          {postData.text ? <Viewer initialValue={postData.text} /> : ""}
+        </PostTxtArea>
       </PostWrap>
 
       {/* 댓글 불러오기 */}
