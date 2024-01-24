@@ -27,20 +27,34 @@ const BoardNoticeRow = (props) => {
   return (
     <>
       <tr>
-        <td>
+        <PostName>
           <Link to={`/board/${name}/${props.noticeid}`} state={{ isnotice }}>
             {props.notice.title}
           </Link>
-        </td>
+          <CommentMark>{`[${props.notice.commentnum}]`}</CommentMark>
+        </PostName>
         <DateTd>{dateString}</DateTd>
       </tr>
     </>
   );
 };
 
+const PostName = styled.td`
+  display: flex;
+  flex: 1;
+  align-items: center;
+`;
+
+const CommentMark = styled.div`
+  font-size: 0.8rem;
+  color: #b0b0b0;
+  margin-left: 0.5rem;
+  user-select: none;
+`;
+
 const DateTd = styled.td`
   width: 100px;
-  text-align: right;
+  text-align: center;
   color: #c0c0c0;
 `;
 

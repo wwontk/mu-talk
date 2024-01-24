@@ -1,12 +1,9 @@
 import styled from "@emotion/styled";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const BoardPostRow = (props) => {
   const { name } = useParams();
-  const navigate = useNavigate();
-  const handlePostClick = () => {
-    navigate(`/board/${name}/${props.postid}`);
-  };
+  const isnotice = props.postdata.isnotice;
 
   // TODO: 컴포넌트로 빼기. BoardPostRow, PageShowPost, CommentItem
   const TimestampDate = () => {
@@ -31,21 +28,39 @@ const BoardPostRow = (props) => {
   return (
     <>
       <tr>
-        <PostTitle onClick={handlePostClick}>{props.postdata.title}</PostTitle>
-        <td>{props.postdata.writer}</td>
+        <PostName>
+          <Link to={`/board/${name}/${props.postid}`} state={{ isnotice }}>
+            {props.postdata.title}
+          </Link>
+          <CommentMark>{`[${props.postdata.commentnum}]`}</CommentMark>
+        </PostName>
+        <WriterName>{props.postdata.writer}</WriterName>
         <Date>{dateString}</Date>
       </tr>
     </>
   );
 };
 
-const PostTitle = styled.td`
-  cursor: pointer;
+const PostName = styled.td`
+  display: flex;
+  flex: 1;
+  align-items: center;
+`;
+
+const CommentMark = styled.div`
+  font-size: 0.8rem;
+  color: #b0b0b0;
+  margin-left: 0.5rem;
+  user-select: none;
+`;
+
+const WriterName = styled.td`
+  width: 100px;
 `;
 
 const Date = styled.td`
   width: 100px;
-  text-align: right;
+  text-align: center;
   color: #c0c0c0;
 `;
 
