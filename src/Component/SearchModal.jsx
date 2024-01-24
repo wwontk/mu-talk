@@ -50,7 +50,7 @@ const SearchModal = forwardRef((props, ref) => {
             <BasicPost>게시판이 존재하지 않아요😭</BasicPost>
           )
         ) : (
-          <BasicPost>오늘은 어떤 뮤톡을?🧐</BasicPost>
+          <BasicPost>오늘은 어떤 뮤톡을 시작해 볼까요?🧐</BasicPost>
         )}
       </ResultList>
     </>
