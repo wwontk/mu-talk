@@ -15,6 +15,7 @@ import NewPostRow from "../Component/NewPostRow";
 
 const PageMain = () => {
   const [allpostData, setAllPostData] = useState([]);
+  const [hotBoardData, setHotBoardData] = useState([]);
 
   useEffect(() => {
     const newquery = query(
@@ -25,6 +26,18 @@ const PageMain = () => {
     onSnapshot(newquery, (snapshot) => {
       const newArray = snapshot.docs.map((doc) => doc.data());
       setAllPostData(newArray);
+    });
+  }, []);
+
+  useEffect(() => {
+    const hotquery = query(
+      collection(db, "boards"),
+      orderBy("postnum", "desc"),
+      limit(4)
+    );
+    onSnapshot(hotquery, (snapshot) => {
+      const hotArray = snapshot.docs.map((doc) => doc.id);
+      setHotBoardData(hotArray);
     });
   }, []);
 
@@ -41,30 +54,16 @@ const PageMain = () => {
       <H2Title>불타는 게시판🔥</H2Title>
       <DivTxt>지금! 가장 핫한 게시판에서 뮤톡 어떠세요?</DivTxt>
       <HotBoardList>
-        <HotBoardItem
-          name={"마리퀴리"}
-          imgurl={
-            "https://ticketimage.interpark.com/Play/image/large/23/23013541_p.gif"
-          }
-        />
-        <HotBoardItem
-          name={"아트"}
-          imgurl={
-            "https://ticketimage.interpark.com/Play/image/large/24/24000651_p.gif"
-          }
-        />
-        <HotBoardItem
-          name={"어쩌면 해피엔딩"}
-          imgurl={
-            "https://ticketimage.interpark.com/Play/image/large/20/20004265_p.gif"
-          }
-        />
-        <HotBoardItem
-          name={"비아 에어 메일"}
-          imgurl={
-            "http://ticketimage.interpark.com/TicketImage/notice_poster/20/20240117090906.jpg"
-          }
-        />
+        {hotBoardData
+          ? hotBoardData.map((hotBoard, index) => (
+              <HotBoardItem
+                name={hotBoard}
+                imgurl={
+                  "https://ticketimage.interpark.com/Play/image/large/23/23013541_p.gif"
+                }
+              />
+            ))
+          : ""}
       </HotBoardList>
       <H2Title>최근 게시글📄</H2Title>
       <DivTxt>뮤톡러들의 따끈한 뮤톡!</DivTxt>
