@@ -2,8 +2,32 @@ import styled from "@emotion/styled";
 import MainSearch from "../Component/MainSearch";
 import HotBoardItem from "../Common/HotBoardItem";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import NewPostRow from "../Component/NewPostRow";
 
 const PageMain = () => {
+  const [allpostData, setAllPostData] = useState([]);
+
+  useEffect(() => {
+    const newquery = query(
+      collection(db, "AllPost"),
+      orderBy("date", "desc"),
+      limit(8)
+    );
+    onSnapshot(newquery, (snapshot) => {
+      const newArray = snapshot.docs.map((doc) => doc.data());
+      setAllPostData(newArray);
+    });
+  }, []);
+
   return (
     <>
       <MainSearch />
@@ -14,7 +38,8 @@ const PageMain = () => {
         </Link>
         <Button>게시판(인기순)</Button>
       </div>
-      <h2>불타는 게시판🔥</h2>
+      <H2Title>불타는 게시판🔥</H2Title>
+      <DivTxt>지금! 가장 핫한 게시판에서 뮤톡 어떠세요?</DivTxt>
       <HotBoardList>
         <HotBoardItem
           name={"마리퀴리"}
@@ -41,20 +66,14 @@ const PageMain = () => {
           }
         />
       </HotBoardList>
-      <h2>최근 게시글📄</h2>
+      <H2Title>최근 게시글📄</H2Title>
+      <DivTxt>뮤톡러들의 따끈한 뮤톡!</DivTxt>
       <Table>
-        <tr>
-          <TableHeader>마리퀴리</TableHeader>
-          <td>마지막 공연 스케줄 떴대!!</td>
-        </tr>
-        <tr>
-          <TableHeader>일 테노레</TableHeader>
-          <td>어제 일 테노레 보고 왔어</td>
-        </tr>
-        <tr>
-          <TableHeader>더 데빌: 파우스트</TableHeader>
-          <td>240103 더데빌 후기</td>
-        </tr>
+        {allpostData.length > 0
+          ? allpostData.map((post, index) => (
+              <NewPostRow key={index} data={post} />
+            ))
+          : ""}
       </Table>
     </>
   );
@@ -77,6 +96,16 @@ const Button = styled.button`
   }
 `;
 
+const H2Title = styled.h2`
+  margin-bottom: 0;
+`;
+
+const DivTxt = styled.div`
+  margin-bottom: 0.83em;
+  font-size: 0.8rem;
+  color: #a0a0a0;
+`;
+
 const HotBoardList = styled.ul`
   display: flex;
   justify-content: space-between;
@@ -86,11 +115,6 @@ const HotBoardList = styled.ul`
 
 const Table = styled.table`
   width: 100%;
-`;
-
-const TableHeader = styled.th`
-  width: 180px;
-  text-align: left;
 `;
 
 export default PageMain;
