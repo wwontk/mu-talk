@@ -4,6 +4,7 @@ import BoardPostRow from "../Component/BoardPostRow";
 import { db } from "../firebase";
 import {
   collection,
+  limit,
   onSnapshot,
   orderBy,
   query,
