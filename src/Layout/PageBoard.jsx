@@ -4,18 +4,27 @@ import BoardPostRow from "../Component/BoardPostRow";
 import { db } from "../firebase";
 import {
   collection,
+  limit,
   onSnapshot,
   orderBy,
   query,
   where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import BoardNoticeRow from "../Component/BoardNoticeRow";
+import Pagenate from "../Component/Pagenate";
 
 const PageBoard = () => {
   const { name } = useParams();
   const [postData, setPostData] = useState([]);
   const [noticeData, setNoticeData] = useState([]);
+
+  const [data, setData] = useState([]);
+  const [lastVisible, setLastVisible] = useState(null);
+  const [firstVisible, setFirstVisible] = useState(null);
+  const [prevvisible, setPrevvisible] = useState(true);
+  const [nextvisible, setNextvisible] = useState(true);
 
   const postsPath = `boards/${name}/post`;
 
@@ -49,6 +58,27 @@ const PageBoard = () => {
     });
   }, [postsPath]);
 
+  const fetchData = async (props) => {
+    const {
+      data: newData,
+      firstVisible: newFirstVisible,
+      lastVisible: newLastVisible,
+      prevvisible: newPrevvisible,
+      nextvisible: newNextvisible,
+    } = await Pagenate(name, firstVisible, lastVisible, props);
+    setData([...newData]);
+    setFirstVisible(newFirstVisible);
+    setLastVisible(newLastVisible);
+    setPrevvisible(newPrevvisible);
+    setNextvisible(newNextvisible);
+  };
+
+  useEffect(() => {
+    if (postData.length) {
+      fetchData();
+    }
+  }, [postData.length]);
+
   return (
     <>
       <BoardHeader>
@@ -74,7 +104,7 @@ const PageBoard = () => {
       </div>
       <ItemWrap>
         <h2>{`${name} 뮤톡🎶`}</h2>
-        <Table>
+        {/* <Table>
           <tr>
             <PostTitle>제목</PostTitle>
             <PostTitle>작성자</PostTitle>
@@ -90,11 +120,32 @@ const PageBoard = () => {
                 />
               ))
             : ""}
+        </Table> */}
+        <Table>
+          <tr>
+            <PostTitle>제목</PostTitle>
+            <PostTitle>작성자</PostTitle>
+            <th>작성일</th>
+          </tr>
+          {data.length > 0
+            ? data.map((item, index) => (
+                <BoardPostRow
+                  key={index}
+                  postdata={item}
+                  postid={item.id}
+                  postdate={item.date}
+                />
+              ))
+            : ""}
         </Table>
         <ButtonWrap>
-          <Button></Button>
-          <div>블라</div>
-          <Button></Button>
+          <Button onClick={() => fetchData("prev")} disabled={prevvisible}>
+            <FaArrowLeft />
+          </Button>
+          <ButtonTxt>블라</ButtonTxt>
+          <Button onClick={() => fetchData("next")} disabled={nextvisible}>
+            <FaArrowRight />
+          </Button>
         </ButtonWrap>
       </ItemWrap>
     </>
@@ -143,15 +194,23 @@ const ButtonWrap = styled.div`
 `;
 
 const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 30px;
   height: 30px;
   border-radius: 50px;
   border: 1px solid #c0c0c0;
   cursor: pointer;
   background-color: #fff;
-  &:hover {
-    background-color: #e0e0e0;
-  }
+
+  // &:hover {
+  //   background-color: #e0e0e0;
+  // }
+`;
+
+const ButtonTxt = styled.div`
+  margin: 0 0.5rem;
 `;
 
 export default PageBoard;
