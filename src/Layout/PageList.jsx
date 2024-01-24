@@ -34,8 +34,6 @@ const PageList = () => {
 };
 
 const ListWrap = styled.div`
-  border: 2px solid #fe7a36;
-  border-radius: 1rem;
   padding: 1rem;
 `;
 
