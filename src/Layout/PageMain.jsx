@@ -36,7 +36,10 @@ const PageMain = () => {
       limit(4)
     );
     onSnapshot(hotquery, (snapshot) => {
-      const hotArray = snapshot.docs.map((doc) => doc.id);
+      const hotArray = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
       setHotBoardData(hotArray);
     });
   }, []);
@@ -57,10 +60,9 @@ const PageMain = () => {
         {hotBoardData
           ? hotBoardData.map((hotBoard, index) => (
               <HotBoardItem
-                name={hotBoard}
-                imgurl={
-                  "https://ticketimage.interpark.com/Play/image/large/23/23013541_p.gif"
-                }
+                key={index}
+                name={hotBoard.id}
+                poster={hotBoard.data.attachmentUrl}
               />
             ))
           : ""}
