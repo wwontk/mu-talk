@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import BoardListButton from "../Component/BoardListButton";
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 const PageList = () => {
   const [boardList, setBoardList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +21,10 @@ const PageList = () => {
     };
     fetchData();
   }, []);
+
+  const handleCreateClick = () => {
+    navigate("/boardcreate");
+  };
   return (
     <>
       <h2>뮤톡 게시판 목록✊ (ㄱㄴㄷ순)</h2>
@@ -29,6 +35,7 @@ const PageList = () => {
             ))
           : ""}
       </ListWrap>
+      <button onClick={handleCreateClick}>게시판 생성하러 가기</button>
     </>
   );
 };
