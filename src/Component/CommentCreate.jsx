@@ -2,13 +2,20 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { auth, db } from "../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  updateDoc,
+  increment,
+} from "firebase/firestore";
 
 const CommentCreate = () => {
   const { name, postno } = useParams();
   const [comment, setComment] = useState("");
   const [userData, setUserData] = useState([]);
 
+  const postPath = `boards/${name}/post/${postno}`;
   const commentPath = `boards/${name}/post/${postno}/comment`;
 
   useEffect(() => {
@@ -29,6 +36,10 @@ const CommentCreate = () => {
       userid: userData.uid,
       writer: userData.displayName,
       date: new Date(),
+    });
+    const ref = doc(db, postPath);
+    await updateDoc(ref, {
+      commentnum: increment(1),
     });
     setComment("");
   };
