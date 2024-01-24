@@ -11,7 +11,7 @@ const HotBoardItem = (props) => {
     <>
       <Item>
         <Img
-          src={props.imgurl}
+          src={props.poster}
           alt="마리퀴리"
           onClick={handleClickHotBoard}
         ></Img>
