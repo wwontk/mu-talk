@@ -20,6 +20,8 @@ import { Viewer } from "@toast-ui/react-editor";
 
 const PageShowPost = () => {
   const { name, postno } = useParams();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const location = useLocation();
   const isNotice = location.state.isnotice;
 
@@ -47,6 +49,9 @@ const PageShowPost = () => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setUserData(user);
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
       }
     });
   }, []);
@@ -108,9 +113,13 @@ const PageShowPost = () => {
           <Link to={`/board/${name}`}>
             <HeaderButton>목록</HeaderButton>
           </Link>
-          <Link to={`/board/${name}/posting`}>
-            <HeaderButton>글쓰기</HeaderButton>
-          </Link>
+          {isLoggedIn ? (
+            <Link to={`/board/${name}/posting`}>
+              <HeaderButton>글쓰기</HeaderButton>
+            </Link>
+          ) : (
+            ""
+          )}
         </div>
       </BoardHeader>
 
@@ -150,7 +159,7 @@ const PageShowPost = () => {
       <CommentReadBox />
 
       {/* 댓글 달기 */}
-      <CommentCreate />
+      {isLoggedIn ? <CommentCreate /> : ""}
     </>
   );
 };

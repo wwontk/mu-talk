@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
 import { Link, useParams } from "react-router-dom";
 import BoardPostRow from "../Component/BoardPostRow";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import {
   collection,
-  limit,
   onSnapshot,
   orderBy,
   query,
@@ -17,6 +16,18 @@ import Pagenate from "../Component/Pagenate";
 
 const PageBoard = () => {
   const { name } = useParams();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    });
+  }, []);
+
   const [postData, setPostData] = useState([]);
   const [noticeData, setNoticeData] = useState([]);
 
@@ -83,9 +94,13 @@ const PageBoard = () => {
     <>
       <BoardHeader>
         <Title>{name}</Title>
-        <Link to="posting">
-          <WriteButton>글쓰기</WriteButton>
-        </Link>
+        {isLoggedIn ? (
+          <Link to="posting">
+            <WriteButton>글쓰기</WriteButton>
+          </Link>
+        ) : (
+          ""
+        )}
       </BoardHeader>
       <hr></hr>
       <div>
@@ -104,23 +119,6 @@ const PageBoard = () => {
       </div>
       <ItemWrap>
         <h2>{`${name} 뮤톡🎶`}</h2>
-        {/* <Table>
-          <tr>
-            <PostTitle>제목</PostTitle>
-            <PostTitle>작성자</PostTitle>
-            <th>작성일</th>
-          </tr>
-          {postData.length > 0
-            ? postData.map((post, index) => (
-                <BoardPostRow
-                  key={index}
-                  postdata={post.data}
-                  postid={post.id}
-                  postdate={post.data.date}
-                />
-              ))
-            : ""}
-        </Table> */}
         <Table>
           <tr>
             <PostTitle>제목</PostTitle>
