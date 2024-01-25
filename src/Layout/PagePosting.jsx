@@ -30,9 +30,11 @@ const PagePosting = () => {
       if (user) {
         setNickname(user.displayName);
         setUseruid(user.uid);
+      } else {
+        navigate(`/board/${name}`);
       }
     });
-  });
+  }, [name, navigate]);
 
   const handleChange = (event) => {
     const {
