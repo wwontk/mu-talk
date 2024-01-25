@@ -14,8 +14,8 @@ const PageNav = () => {
       } else {
         setIsLoggedIn(false);
       }
-    }, []);
-  });
+    });
+  }, []);
   const handleLogout = () => {
     auth.signOut();
     alert("로그아웃 하였습니다!");
