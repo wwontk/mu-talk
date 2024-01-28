@@ -26,7 +26,7 @@ const BoardNoticeRow = (props) => {
 
   return (
     <>
-      <tr>
+      <MobileRow>
         <PostName>
           <Link to={`/board/${name}/${props.noticeid}`} state={{ isnotice }}>
             {props.notice.title}
@@ -34,12 +34,19 @@ const BoardNoticeRow = (props) => {
           <CommentMark>{`[${props.notice.commentnum}]`}</CommentMark>
         </PostName>
         <DateTd>{dateString}</DateTd>
-      </tr>
+      </MobileRow>
     </>
   );
 };
 
-const PostName = styled.td`
+const MobileRow = styled.div`
+  margin-bottom: 0.5rem;
+  @media (max-width: 479px) {
+    margin: 0.8rem 0;
+  }
+`;
+
+const PostName = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
@@ -52,10 +59,11 @@ const CommentMark = styled.div`
   user-select: none;
 `;
 
-const DateTd = styled.td`
-  width: 100px;
-  text-align: center;
+const DateTd = styled.div`
   color: #c0c0c0;
+  @media (max-width: 479px) {
+    font-size: 0.8rem;
+  }
 `;
 
 export default BoardNoticeRow;

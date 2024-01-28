@@ -53,6 +53,7 @@ const PageLogin = () => {
             type="email"
             value={email}
             onChange={onChange}
+            autocomplete="off"
           ></Input>
         </InputWrap>
         <InputWrap>
@@ -85,6 +86,10 @@ const LoginForm = styled.form`
   margin: 0 auto;
 
   gap: 1rem;
+
+  @media (max-width: 479px) {
+    width: 100%;
+  }
 `;
 
 const InputWrap = styled.div`

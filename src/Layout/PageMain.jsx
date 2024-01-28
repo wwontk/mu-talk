@@ -50,9 +50,8 @@ const PageMain = () => {
       <Hr></Hr>
       <div>
         <Link to={"/boardlist"}>
-          <Button>게시판(ㄱㄴㄷ순)</Button>
+          <Button>게시판 전체보기</Button>
         </Link>
-        <Button>게시판(인기순)</Button>
       </div>
       <H2Title>불타는 게시판🔥</H2Title>
       <DivTxt>지금! 가장 핫한 게시판에서 뮤톡 어떠세요?</DivTxt>
@@ -69,13 +68,13 @@ const PageMain = () => {
       </HotBoardList>
       <H2Title>최근 게시글📄</H2Title>
       <DivTxt>뮤톡러들의 따끈한 뮤톡!</DivTxt>
-      <Table>
+      <NewWrap>
         {allpostData.length > 0
           ? allpostData.map((post, index) => (
               <NewPostRow key={index} data={post} />
             ))
           : ""}
-      </Table>
+      </NewWrap>
     </>
   );
 };
@@ -92,6 +91,9 @@ const Button = styled.button`
   border: none;
   border-radius: 1rem;
   cursor: pointer;
+
+  transition: background-color 0.2s linear;
+
   &:hover {
     background-color: #d9d9d9;
   }
@@ -112,10 +114,20 @@ const HotBoardList = styled.ul`
   justify-content: space-between;
   padding: 0;
   margin: 0;
+
+  @media (max-width: 767px) {
+    overflow-x: scroll;
+    gap: 1rem;
+  }
 `;
 
-const Table = styled.table`
+const NewWrap = styled.div`
   width: 100%;
+  box-sizing: border-box;
+  // border: 1px solid #c0c0c0;
+  // border-radius: 0.5rem;
+  // padding: 0.5rem;
+  overflow: hidden;
 `;
 
 export default PageMain;

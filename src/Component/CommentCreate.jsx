@@ -51,7 +51,7 @@ const CommentCreate = () => {
           type="text"
           value={comment}
           onChange={handleChange}
-          autoComplete="false"
+          autoComplete="off"
         ></CommentTxtArea>
         <CommentButton>댓글 등록</CommentButton>
       </CommentBox>

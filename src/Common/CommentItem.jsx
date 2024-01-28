@@ -91,25 +91,29 @@ const CommentItem = (props) => {
                 value={comment.text}
                 onChange={handleChagne}
                 required
+                autocomplete="off"
               ></EditInput>
               <UDButton>수정</UDButton>
+              <UDButton type="button" onClick={toggleEdit}>
+                취소
+              </UDButton>
             </EditForm>
-            <UDButton onClick={toggleEdit}>취소</UDButton>
           </>
         ) : (
           <>
             <CommentTxt>{text}</CommentTxt>
             {userid === userData.uid ? (
               <>
-                <UDButton onClick={toggleEdit}>수정</UDButton>
-                <UDButton onClick={handleDeleteButton}>삭제</UDButton>
+                <EditButtonWrap>
+                  <UDButton onClick={toggleEdit}>수정</UDButton>
+                  <UDButton onClick={handleDeleteButton}>삭제</UDButton>
+                </EditButtonWrap>
               </>
             ) : (
               ""
             )}
           </>
         )}
-
         <DateTd>{dateString}</DateTd>
       </CommentTableRow>
     </>
@@ -121,15 +125,31 @@ const CommentTableRow = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0.5rem 0;
+  @media (max-width: 479px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1rem 0;
+  }
 `;
 
 const CommentWriter = styled.span`
   width: 100px;
   padding: 1px;
+  @media (max-width: 479px) {
+    width: auto;
+    padding: 0;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    color: #555;
+  }
 `;
 
 const CommentTxt = styled.span`
   flex: 1;
+  padding: 0;
+  @media (max-width: 479px) {
+    margin-bottom: 0.3rem;
+  }
 `;
 
 const EditForm = styled.form`
@@ -147,19 +167,25 @@ const EditInput = styled.input`
   }
 `;
 
+const EditButtonWrap = styled.div`
+  display: flex;
+  @media (max-width: 479px) {
+  }
+`;
+
 const UDButton = styled.button`
   font-size: 0.8rem;
   color: #b0b0b0;
   background-color: inherit;
   border: none;
   cursor: pointer;
-  margin: 0 0.2rem;
+  margin-right: 0.2rem;
   padding: 0;
   text-wrap: nowrap;
   line-height: 1rem;
 `;
 
-const DateTd = styled.td`
+const DateTd = styled.div`
   width: 135px;
 
   font-size: 0.85rem;

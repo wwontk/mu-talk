@@ -70,6 +70,7 @@ const PageSignUp = () => {
             type="email"
             value={email}
             onChange={onChange}
+            autocomplete="off"
           ></Input>
         </InputWrap>
         <InputWrap>
@@ -97,6 +98,7 @@ const PageSignUp = () => {
             type="text"
             value={nickname}
             onChange={onChange}
+            autocomplete="off"
           ></Input>
         </InputWrap>
         <ErrMsg>{errMsg}</ErrMsg>
@@ -114,6 +116,10 @@ const LoginForm = styled.form`
   margin: 0 auto;
 
   gap: 1rem;
+
+  @media (max-width: 479px) {
+    width: 100%;
+  }
 `;
 
 const InputWrap = styled.div`

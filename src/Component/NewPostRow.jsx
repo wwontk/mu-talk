@@ -30,21 +30,26 @@ const NewPostRow = (props) => {
   return (
     <>
       {postdata ? (
-        <tr>
+        <TableRow>
           <TableHeader>
             <Link to={`/board/${props.data.boardname}`}>
               {props.data.boardname}
             </Link>
           </TableHeader>
-          <td>
+          <PostWrap>
+            <MobileHeader>
+              <Link to={`/board/${props.data.boardname}`}>
+                {props.data.boardname}
+              </Link>
+            </MobileHeader>
             <Link
               to={`/board/${props.data.boardname}/${postdata}`}
               state={{ isnotice }}
             >
-              {props.data.title}
+              <PostTitle>{props.data.title}</PostTitle>
             </Link>
-          </td>
-        </tr>
+          </PostWrap>
+        </TableRow>
       ) : (
         ""
       )}
@@ -52,9 +57,55 @@ const NewPostRow = (props) => {
   );
 };
 
-const TableHeader = styled.th`
+const TableRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+
+  // @media (max-width: 479px) {
+  //   margin: 0.5rem 0;
+  // }
+`;
+
+const TableHeader = styled.div`
   width: 180px;
-  text-align: left;
+  font-weight: bold;
+
+  @media (max-width: 479px) {
+    display: none;
+  }
+`;
+
+const PostWrap = styled.div`
+  width: 620px;
+
+  @media (max-width: 1279px) {
+    width: 470px;
+  }
+  @media (max-width: 767px) {
+    width: 220px;
+  }
+  @media (max-width: 479px) {
+    width: 100%;
+  }
+`;
+
+const MobileHeader = styled.div`
+  display: none;
+  font-weight: bold;
+
+  @media (max-width: 479px) {
+    display: block;
+  }
+`;
+
+const PostTitle = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export default NewPostRow;

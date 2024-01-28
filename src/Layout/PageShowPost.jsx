@@ -109,7 +109,7 @@ const PageShowPost = () => {
     <>
       <BoardHeader>
         <Title>{isNotice ? `공지사항📢` : `${name} 뮤톡🎶`}</Title>
-        <div>
+        <ButtonWrap>
           <Link to={`/board/${name}`}>
             <HeaderButton>목록</HeaderButton>
           </Link>
@@ -120,7 +120,7 @@ const PageShowPost = () => {
           ) : (
             ""
           )}
-        </div>
+        </ButtonWrap>
       </BoardHeader>
 
       <hr></hr>
@@ -176,6 +176,18 @@ const BoardHeader = styled.div`
 const Title = styled.h2`
   margin: 0;
   font-size: 1.8rem;
+
+  @media (max-width: 479px) {
+    font-size: 1.2rem;
+  }
+`;
+
+const ButtonWrap = styled.div`
+  @media (max-width: 479px) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 `;
 
 const HeaderButton = styled.button`
@@ -185,6 +197,12 @@ const HeaderButton = styled.button`
   border: 1px solid #000;
   background-color: #fff;
   cursor: pointer;
+
+  @media (max-width: 479px) {
+    width: 50px;
+    height: 25px;
+    font-size: 0.7rem;
+  }
 `;
 
 const PostWrap = styled.div`

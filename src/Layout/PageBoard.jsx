@@ -104,7 +104,7 @@ const PageBoard = () => {
       </BoardHeader>
       <hr></hr>
       <div>
-        <h2>공지사항📢</h2>
+        <H2Title>공지사항📢</H2Title>
         <Table>
           {noticeData.length > 0
             ? noticeData.map((notice, index) => (
@@ -118,13 +118,8 @@ const PageBoard = () => {
         </Table>
       </div>
       <ItemWrap>
-        <h2>{`${name} 뮤톡🎶`}</h2>
+        <H2Title>{`${name} 뮤톡🎶`}</H2Title>
         <Table>
-          <tr>
-            <PostTitle>제목</PostTitle>
-            <PostTitle>작성자</PostTitle>
-            <th>작성일</th>
-          </tr>
           {data.length > 0
             ? data.map((item, index) => (
                 <BoardPostRow
@@ -140,7 +135,6 @@ const PageBoard = () => {
           <Button onClick={() => fetchData("prev")} disabled={prevvisible}>
             <FaArrowLeft />
           </Button>
-          <ButtonTxt>블라</ButtonTxt>
           <Button onClick={() => fetchData("next")} disabled={nextvisible}>
             <FaArrowRight />
           </Button>
@@ -162,6 +156,17 @@ const BoardHeader = styled.div`
 const Title = styled.h1`
   margin: 0;
   font-size: 2.3rem;
+
+  @media (max-width: 479px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const H2Title = styled.h2`
+  @media (max-width: 479px) {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+  }
 `;
 
 const WriteButton = styled.button`
@@ -170,18 +175,23 @@ const WriteButton = styled.button`
   border: 1px solid #000;
   background-color: #fff;
   cursor: pointer;
+
+  @media (max-width: 479px) {
+    width: 50px;
+    height: 25px;
+    font-size: 0.7rem;
+  }
 `;
 
 const ItemWrap = styled.div`
+  width: 100%;
   margin: 2rem 0;
 `;
 
-const Table = styled.table`
-  width: 100%;
-`;
-
-const PostTitle = styled.th`
-  text-align: left;
+const Table = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const ButtonWrap = styled.div`
@@ -195,6 +205,7 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 0.5rem;
   width: 30px;
   height: 30px;
   border-radius: 50px;
@@ -205,10 +216,11 @@ const Button = styled.button`
   &:hover {
     box-shadow: 0px 0px 3px 2px #c0c0c0;
   }
-`;
 
-const ButtonTxt = styled.div`
-  margin: 0 0.5rem;
+  &:disabled {
+    box-shadow: none;
+    cursor: auto;
+  }
 `;
 
 export default PageBoard;

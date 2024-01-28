@@ -27,25 +27,71 @@ const BoardPostRow = (props) => {
 
   return (
     <>
-      <tr>
+      {/* <TableRow>
         <PostName>
-          <Link to={`/board/${name}/${props.postid}`} state={{ isnotice }}>
-            {props.postdata.title}
-          </Link>
+          <PostTitle>
+            <Link to={`/board/${name}/${props.postid}`} state={{ isnotice }}>
+              {props.postdata.title}
+            </Link>
+          </PostTitle>
           <CommentMark>{`[${props.postdata.commentnum}]`}</CommentMark>
         </PostName>
         <WriterName>{props.postdata.writer}</WriterName>
         <Date>{dateString}</Date>
-      </tr>
+      </TableRow> */}
+      <MobileRow>
+        <MobilePost>
+          <Link
+            className="post"
+            to={`/board/${name}/${props.postid}`}
+            state={{ isnotice }}
+          >
+            <PostTitle>{props.postdata.title}</PostTitle>
+          </Link>
+          <CommentMark>{`[${props.postdata.commentnum}]`}</CommentMark>
+        </MobilePost>
+        <MobileWriterDate>
+          {props.postdata.writer} | {dateString}
+        </MobileWriterDate>
+      </MobileRow>
     </>
   );
 };
 
-const PostName = styled.td`
-  display: flex;
-  flex: 1;
-  align-items: center;
+// const TableRow = styled.tr`
+//   width: 100%;
+//   @media (max-width: 479px) {
+//     display: none;
+//   }
+// `;
+
+const MobileRow = styled.div`
+  margin-bottom: 0.5rem;
+  @media (max-width: 479px) {
+    margin: 0.8rem 0;
+  }
 `;
+
+const PostTitle = styled.div`
+  // overflow: hidden;
+  // white-space: nowrap;
+  // text-overflow: ellipsis;
+`;
+
+// const PostName = styled.td`
+//   display: flex;
+//   flex: 1;
+//   align-items: center;
+
+//   @media (max-width: 479px) {
+//   }
+// `;
+
+// const PostTitle = styled.div`
+//   &:hover {
+//     text-decoration: underline;
+//   }
+// `;
 
 const CommentMark = styled.div`
   font-size: 0.8rem;
@@ -54,14 +100,30 @@ const CommentMark = styled.div`
   user-select: none;
 `;
 
-const WriterName = styled.td`
-  width: 100px;
+// const WriterName = styled.td`
+//   width: 100px;
+// `;
+
+// const Date = styled.td`
+//   width: 100px;
+//   text-align: center;
+//   color: #c0c0c0;
+// `;
+
+const MobilePost = styled.div`
+  display: flex;
+  width: 100%;
+
+  // & .post {
+  //   width: 100%;
+  // }
 `;
 
-const Date = styled.td`
-  width: 100px;
-  text-align: center;
+const MobileWriterDate = styled.div`
   color: #c0c0c0;
+  @media (max-width: 479px) {
+    font-size: 0.8rem;
+  }
 `;
 
 export default BoardPostRow;

@@ -19,6 +19,16 @@ function App() {
 const Body = styled.div`
   width: 800px;
   margin: 0 auto 2rem;
+
+  @media (max-width: 1279px) {
+    width: 650px;
+  }
+  @media (max-width: 767px) {
+    width: 400px;
+  }
+  @media (max-width: 479px) {
+    width: 250px;
+  }
 `;
 
 export default App;
