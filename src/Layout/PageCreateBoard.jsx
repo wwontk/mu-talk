@@ -2,10 +2,12 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { db, storageService } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const PageCreateBoard = () => {
   const [title, setTitle] = useState("");
   const [attachment, setAttachment] = useState("");
+  const navigate = useNavigate();
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -24,10 +26,11 @@ const PageCreateBoard = () => {
     };
     reader.readAsDataURL(theFile);
   };
-  const handleClearClick = () => {
-    setAttachment("");
-  };
   const handleSubmit = async (e) => {
+    if (!title || !attachment) {
+      alert(`이름과 포스터를 입력해주세요.`);
+      return;
+    }
     e.preventDefault();
     const attachmentRef = storageService.ref().child(`${title}`);
     const response = await attachmentRef.putString(attachment, "data_url");
@@ -37,6 +40,8 @@ const PageCreateBoard = () => {
       attachmentUrl,
     });
     setAttachment("");
+    alert("게시판이 생성되었습니다.");
+    navigate(`/board/${title}`);
   };
   return (
     <>
@@ -52,6 +57,7 @@ const PageCreateBoard = () => {
               value={title}
               type="text"
               onChange={handleTitleChange}
+              autocomplete="off"
             ></TitleInput>
           </ContentWrap>
 
@@ -63,15 +69,16 @@ const PageCreateBoard = () => {
               onChange={handleFileChange}
             ></input>
             {attachment && (
-              <img src={attachment} width="50px" height="50px" alt="이미진" />
+              <img src={attachment} width="50px" height="50px" alt="이미지" />
             )}
-            <button type="button" onClick={handleClearClick}>
-              clear
-            </button>
-            <button>제출</button>
           </ContentWrap>
+          <button>생성하기</button>
         </form>
       </FormWrap>
+      <DescTxt>
+        존재하지 않는 뮤지컬, 연극이나 맞지 않는 포스터를 등록할 시 관리자의
+        무통보 삭제가 있을 수 있습니다.
+      </DescTxt>
     </>
   );
 };
@@ -90,14 +97,20 @@ const FormWrap = styled.div`
   border: 1px solid #c0c0c0;
 `;
 const ContentWrap = styled.div`
-  margin: 1rem 0;
+  margin-bottom: 1rem;
 `;
 const TitleInput = styled.input`
-  width: 200px;
+  box-sizing: border-box;
+  width: 100%;
   border: 1px solid #c0c0c0;
   &:focus {
     outline: none;
   }
+`;
+const DescTxt = styled.div`
+  margin: 1rem 0;
+  font-size: 0.8rem;
+  color: #c0c0c0;
 `;
 
 export default PageCreateBoard;
