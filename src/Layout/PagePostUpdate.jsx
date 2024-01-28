@@ -114,6 +114,7 @@ const PagePostUpdate = () => {
           type="text"
           value={editdata.title}
           onChange={handleChange}
+          autocomplete="off"
         />
         <Editor
           ref={editorRef}

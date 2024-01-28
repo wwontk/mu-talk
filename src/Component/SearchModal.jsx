@@ -4,7 +4,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import { db } from "../firebase";
 import { Link } from "react-router-dom";
 
-const SearchModal = forwardRef((props, ref) => {
+const SearchModal = forwardRef((props) => {
   let wrapperRef = useRef();
   const [boardlist, setBoardlist] = useState([]);
 
@@ -41,10 +41,10 @@ const SearchModal = forwardRef((props, ref) => {
       <ResultList ref={wrapperRef}>
         {props.keyword.length > 0 ? (
           searched.length > 0 ? (
-            searched.map((board) => (
-              <ResultItem>
-                <Link to={`/board/${board}`}>{board}</Link>
-              </ResultItem>
+            searched.map((board, index) => (
+              <Link to={`/board/${board}`}>
+                <ResultItem key={index}>{board}</ResultItem>
+              </Link>
             ))
           ) : (
             <BasicPost>게시판이 존재하지 않아요😭</BasicPost>
@@ -59,21 +59,26 @@ const SearchModal = forwardRef((props, ref) => {
 
 const ResultList = styled.ul`
   position: absolute;
-  top: 40px;
-  left: 0;
+  top: 37px;
+  left: -1px;
 
-  width: 600px;
+  width: calc(100% + 2px);
   margin: 0;
   padding: 1rem;
+  box-sizing: border-box;
 
   border: 1px solid #c0c0c0;
-  border-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
   background-color: #fff;
 `;
 
 const ResultItem = styled.li`
   list-style: none;
   padding: 0.5rem;
+
+  transition: background-color 0.2s linear;
+
   &:hover {
     background-color: #e0e0e0;
   }

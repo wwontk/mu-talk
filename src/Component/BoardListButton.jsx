@@ -13,6 +13,7 @@ const BoardListButton = (props) => {
 
 const ListButton = styled.button`
   margin-right: 1rem;
+  margin-bottom: 1rem;
   padding: 0.5rem;
   border: 1px solid #c0c0c0;
   background-color: #fff;
