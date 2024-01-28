@@ -33,7 +33,7 @@ const Pagenate = async (
     collection(db, postsPath),
     where("isnotice", "==", false),
     orderBy("date", "desc"),
-    limit(10)
+    limit(8)
   );
 
   if (props === "prev") {
@@ -43,7 +43,7 @@ const Pagenate = async (
         where("isnotice", "==", false),
         orderBy("date", "desc"),
         endBefore(firstVisible),
-        limit(10)
+        limit(8)
       );
     }
   }
@@ -54,7 +54,7 @@ const Pagenate = async (
         where("isnotice", "==", false),
         orderBy("date", "desc"),
         startAfter(lastVisible),
-        limit(10)
+        limit(8)
       );
     }
   }
