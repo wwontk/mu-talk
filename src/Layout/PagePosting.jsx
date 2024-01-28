@@ -8,6 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useNavigate, useParams } from "react-router-dom";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -88,6 +89,18 @@ const PagePosting = () => {
     navigate(`/board/${name}`);
   };
 
+  const onUploadImage = async (blob, callback) => {
+    let imgUrl;
+    const storage = getStorage();
+    const storageRef = ref(storage, `boardPhoto/${blob.name}`);
+    uploadBytes(storageRef, blob).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        imgUrl = url;
+        callback(imgUrl, "alt-txt");
+      });
+    });
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -106,6 +119,7 @@ const PagePosting = () => {
           value={title}
           placeholder="제목을 입력해주세요"
           onChange={handleChange}
+          autocomplete="off"
         />
         <Editor
           ref={editorRef}
@@ -116,6 +130,9 @@ const PagePosting = () => {
           useCommandShortcut={false}
           hideModeSwitch={true}
           onChange={handleToastChange}
+          hooks={{
+            addImageBlobHook: onUploadImage,
+          }}
         />
         <Button>작성</Button>
         <Button type="button" onClick={handleCancelButton}>
