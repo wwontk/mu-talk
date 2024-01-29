@@ -31,6 +31,10 @@ const CommentCreate = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (comment.length === 0) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
     await addDoc(collection(db, commentPath), {
       text: comment,
       userid: userData.uid,
