@@ -88,8 +88,10 @@ const Hr = styled.hr`
 const Button = styled.button`
   padding: 0.5rem 1rem;
   margin-right: 1rem;
+
   border: none;
   border-radius: 1rem;
+  color: #000;
   cursor: pointer;
 
   transition: background-color 0.2s linear;

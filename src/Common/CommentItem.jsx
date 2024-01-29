@@ -190,6 +190,10 @@ const DateTd = styled.div`
 
   font-size: 0.85rem;
   color: #c0c0c0;
+
+  @media (max-width: 479px) {
+    width: auto;
+  }
 `;
 
 export default CommentItem;

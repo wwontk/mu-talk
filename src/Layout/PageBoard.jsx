@@ -173,11 +173,12 @@ const WriteButton = styled.button`
   width: 80px;
   height: 30px;
   border: 1px solid #000;
+  color: #000;
   background-color: #fff;
   cursor: pointer;
 
   @media (max-width: 479px) {
-    width: 50px;
+    width: 60px;
     height: 25px;
     font-size: 0.7rem;
   }
@@ -211,6 +212,7 @@ const Button = styled.button`
   border-radius: 50px;
   border: 1px solid #c0c0c0;
   cursor: pointer;
+  color: #000;
   background-color: #fff;
 
   &:hover {

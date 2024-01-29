@@ -171,6 +171,11 @@ const BoardHeader = styled.div`
 
   margin-top: 80px;
   margin-bottom: 20px;
+
+  @media (max-width: 479px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Title = styled.h2`
@@ -185,7 +190,6 @@ const Title = styled.h2`
 const ButtonWrap = styled.div`
   @media (max-width: 479px) {
     display: flex;
-    flex-direction: column;
     gap: 0.5rem;
   }
 `;
@@ -202,6 +206,7 @@ const HeaderButton = styled.button`
     width: 50px;
     height: 25px;
     font-size: 0.7rem;
+    margin: 0.5rem 0.5rem 0 0;
   }
 `;
 
