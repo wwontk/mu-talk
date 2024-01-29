@@ -88,6 +88,7 @@ const PageBoard = () => {
     if (postData.length) {
       fetchData();
     }
+    // eslint-disable-next-line
   }, [postData.length]);
 
   return (
