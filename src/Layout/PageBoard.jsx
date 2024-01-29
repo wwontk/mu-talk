@@ -221,6 +221,7 @@ const Button = styled.button`
   }
 
   &:disabled {
+    color: #c0c0c0;
     box-shadow: none;
     cursor: auto;
   }

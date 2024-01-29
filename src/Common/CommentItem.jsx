@@ -162,8 +162,12 @@ const EditInput = styled.input`
   box-sizing: border-box;
   padding: 0.5rem 0.3rem;
   border: 1px solid #c0c0c0;
+  margin-right: 0.2rem;
   &:focus {
     outline: none;
+  }
+  @media (max-width: 479px) {
+    width: auto;
   }
 `;
 
@@ -183,6 +187,8 @@ const UDButton = styled.button`
   padding: 0;
   text-wrap: nowrap;
   line-height: 1rem;
+  @media (max-width: 479px) {
+  }
 `;
 
 const DateTd = styled.div`

@@ -190,7 +190,6 @@ const Title = styled.h2`
 const ButtonWrap = styled.div`
   @media (max-width: 479px) {
     display: flex;
-    gap: 0.5rem;
   }
 `;
 
@@ -199,12 +198,13 @@ const HeaderButton = styled.button`
   height: 30px;
   margin-left: 0.5rem;
   border: 1px solid #000;
+  color: #000;
   background-color: #fff;
   cursor: pointer;
 
   @media (max-width: 479px) {
-    width: 50px;
-    height: 25px;
+    width: 55px;
+    height: 30px;
     font-size: 0.7rem;
     margin: 0.5rem 0.5rem 0 0;
   }
@@ -223,7 +223,10 @@ const PostInfo = styled.div`
 `;
 
 const Button = styled.button`
+  width: auto;
   border: 1px solid #c0c0c0;
+  text-wrap: nowrap;
+  color: #000;
   background-color: white;
   margin-top: 1rem;
   margin-right: 0.5rem;
