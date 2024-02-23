@@ -31,8 +31,12 @@ export default function HotBoardSlider(props) {
   return (
     <Slider {...settings}>
       {props.item
-        ? props.item.map((item) => (
-            <SliderCard name={item.id} imgUrl={item.data.attachmentUrl} />
+        ? props.item.map((item, index) => (
+            <SliderCard
+              key={index}
+              name={item.id}
+              imgUrl={item.data.attachmentUrl}
+            />
           ))
         : ""}
     </Slider>
