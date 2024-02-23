@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import MainSearch from "../Component/MainSearch";
-import HotBoardItem from "../Common/HotBoardItem";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
@@ -12,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import NewPostRow from "../Component/NewPostRow";
+import HotBoardSlider from "../Component/HotBoardSlider";
 
 const PageMain = () => {
   const [allpostData, setAllPostData] = useState([]);
@@ -55,8 +55,9 @@ const PageMain = () => {
       </div>
       <H2Title>불타는 게시판🔥</H2Title>
       <DivTxt>지금! 가장 핫한 게시판에서 뮤톡 어떠세요?</DivTxt>
+      {hotBoardData ? <HotBoardSlider item={hotBoardData} /> : ""}
       <HotBoardList>
-        {hotBoardData
+        {/* {hotBoardData
           ? hotBoardData.map((hotBoard, index) => (
               <HotBoardItem
                 key={index}
@@ -64,7 +65,7 @@ const PageMain = () => {
                 poster={hotBoard.data.attachmentUrl}
               />
             ))
-          : ""}
+          : ""} */}
       </HotBoardList>
       <H2Title>최근 게시글📄</H2Title>
       <DivTxt>뮤톡러들의 따끈한 뮤톡!</DivTxt>
