@@ -9,6 +9,8 @@ import PageShowPost from "./Layout/PageShowPost";
 import PagePostUpdate from "./Layout/PagePostUpdate";
 import PageList from "./Layout/PageList";
 import PageCreateBoard from "./Layout/PageCreateBoard";
+import PageMyBoard from "./Layout/PageMyBoard";
+import PageMyPost from "./Layout/PageMyPost";
 
 const PageNavigator = () => {
   return (
@@ -16,7 +18,10 @@ const PageNavigator = () => {
       <Route path="/" element={<PageMain />} />
       <Route path="/login" element={<PageLogin />} />
       <Route path="/signup" element={<PageSignUp />} />
-      <Route path="/mypage" element={<PageMyInfo />} />
+      <Route path="/mypage" element={<PageMyInfo />}>
+        <Route path="myboard" element={<PageMyBoard />} />
+        <Route path="mypost" element={<PageMyPost />} />
+      </Route>
       <Route path="/board/:name" element={<PageBoard />}></Route>
       <Route path="/board/:name/posting" element={<PagePosting />}></Route>
       <Route path="/board/:name/:postno" element={<PageShowPost />}></Route>

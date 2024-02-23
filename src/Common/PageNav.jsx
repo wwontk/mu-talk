@@ -35,7 +35,7 @@ const PageNav = () => {
       </MenuItem>
       <MenuItem>
         {isLoggedIn ? (
-          <Link to="/mypage">마이페이지</Link>
+          <Link to="/mypage/myboard">마이페이지</Link>
         ) : (
           <span onClick={handleToLogin}>마이페이지</span>
         )}
