@@ -158,18 +158,6 @@ const TitleInput = styled.input`
   }
 `;
 
-// const TextareaInput = styled.textarea`
-//   box-sizing: border-box;
-//   width: 100%;
-//   height: 300px;
-//   padding: 0.5rem;
-//   border: 1px solid #c0c0c0;
-//   margin-bottom: 1rem;
-//   &:focus {
-//     outline: none;
-//   }
-// `;
-
 const Button = styled.button`
   border: 1px solid #c0c0c0;
   background-color: white;
