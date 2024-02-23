@@ -29,8 +29,8 @@ const CardWrap = styled.div`
 
 const CardInfo = styled.div`
   position: absolute;
-  bottom: 30px;
-  left: 30px;
+  bottom: 35px;
+  left: 35px;
 
   color: white;
 `;
