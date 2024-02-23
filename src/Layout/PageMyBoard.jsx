@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
 import MyBoardCard from "../Component/MyBoardCard";
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
 const PageMyBoard = () => {
