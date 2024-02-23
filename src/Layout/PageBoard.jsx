@@ -3,6 +3,10 @@ import { Link, useParams } from "react-router-dom";
 import BoardPostRow from "../Component/BoardPostRow";
 import { auth, db } from "../firebase";
 import {
+  setDoc,
+  deleteDoc,
+  doc,
+  getDocs,
   collection,
   onSnapshot,
   orderBy,
@@ -13,15 +17,18 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import BoardNoticeRow from "../Component/BoardNoticeRow";
 import Pagenate from "../Component/Pagenate";
+import { GoHeart, GoHeartFill } from "react-icons/go";
 
 const PageBoard = () => {
   const { name } = useParams();
+  const [uidPath, setUidPath] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setIsLoggedIn(true);
+        setUidPath(`users/${user.uid}/Like`);
       } else {
         setIsLoggedIn(false);
       }
@@ -36,6 +43,26 @@ const PageBoard = () => {
   const [firstVisible, setFirstVisible] = useState(null);
   const [prevvisible, setPrevvisible] = useState(true);
   const [nextvisible, setNextvisible] = useState(true);
+
+  const [isLike, setIsLike] = useState(false);
+
+  useEffect(() => {
+    const getLike = async () => {
+      if (!uidPath) {
+        return;
+      }
+      try {
+        const querySnapshot = await getDocs(collection(db, uidPath));
+        const likeArray = querySnapshot.docs.map((doc) => doc.id);
+        if (likeArray.includes(name)) {
+          setIsLike(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getLike();
+  }, [name, uidPath]);
 
   const postsPath = `boards/${name}/post`;
 
@@ -91,10 +118,37 @@ const PageBoard = () => {
     // eslint-disable-next-line
   }, [postData.length]);
 
+  const handleLikeClick = async () => {
+    if (isLike) {
+      await deleteDoc(doc(db, uidPath, name));
+      setIsLike(false);
+    } else if (!isLike) {
+      await setDoc(doc(db, uidPath, name), {
+        isLike: true,
+      });
+      setIsLike(true);
+    }
+  };
+
   return (
     <>
       <BoardHeader>
-        <Title>{name}</Title>
+        <TitleIcon>
+          <Title>{name}</Title>
+          {isLike ? (
+            <GoHeartFill
+              onClick={handleLikeClick}
+              size={25}
+              style={{ marginLeft: 10 }}
+            />
+          ) : (
+            <GoHeart
+              onClick={handleLikeClick}
+              size={25}
+              style={{ marginLeft: 10 }}
+            />
+          )}
+        </TitleIcon>
         {isLoggedIn ? (
           <Link to="posting">
             <WriteButton>글쓰기</WriteButton>
@@ -144,6 +198,11 @@ const PageBoard = () => {
     </>
   );
 };
+
+const TitleIcon = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const BoardHeader = styled.div`
   display: flex;
