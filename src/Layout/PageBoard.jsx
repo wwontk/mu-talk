@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import BoardPostRow from "../Component/BoardPostRow";
 import { auth, db } from "../firebase";
 import {
@@ -23,6 +23,8 @@ const PageBoard = () => {
   const { name } = useParams();
   const [uidPath, setUidPath] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -119,6 +121,11 @@ const PageBoard = () => {
   }, [postData.length]);
 
   const handleLikeClick = async () => {
+    if (!isLoggedIn) {
+      alert("로그인을 진행해주세요!");
+      navigate("/login");
+      return;
+    }
     if (isLike) {
       await deleteDoc(doc(db, uidPath, name));
       setIsLike(false);
