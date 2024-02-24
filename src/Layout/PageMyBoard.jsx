@@ -97,4 +97,8 @@ const CardWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+
+  @media (max-width: 479px) {
+    justify-content: center;
+  }
 `;

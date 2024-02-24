@@ -50,6 +50,10 @@ const PostWrap = styled.div`
   display: flex;
   padding: 1rem;
   border-bottom: 1px solid #c0c0c0;
+
+  @media (max-width: 479px) {
+    flex-direction: column;
+  }
 `;
 
 const PostBoardName = styled.div`
@@ -57,6 +61,10 @@ const PostBoardName = styled.div`
   width: 200px;
   padding-left: 10px;
   font-weight: 600;
+
+  @media (max-width: 479px) {
+    padding: 0;
+  }
 `;
 
 const PostTitle = styled.div`
