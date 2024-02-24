@@ -146,13 +146,13 @@ const PageBoard = () => {
             <GoHeartFill
               onClick={handleLikeClick}
               size={25}
-              style={{ marginLeft: 10 }}
+              style={{ marginLeft: 10, color: "red" }}
             />
           ) : (
             <GoHeart
               onClick={handleLikeClick}
               size={25}
-              style={{ marginLeft: 10 }}
+              style={{ marginLeft: 10, color: "red" }}
             />
           )}
         </TitleIcon>
