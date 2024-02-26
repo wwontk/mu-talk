@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
+import MyInfoModal from "../Component/MyInfoModal";
 
 const PageMyInfo = () => {
   const [userInfo, setUserInfo] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
 
   const navigate = useNavigate();
 
@@ -18,11 +20,16 @@ const PageMyInfo = () => {
     }, []);
   });
 
+  const handleEditClick = () => {
+    setIsEdit(true);
+  };
+
   return (
     <>
       <InfoWrap>
         <InfoTitle>{userInfo.displayName}님, 즐거운 뮤톡 되세요!</InfoTitle>
-        <EditButton>프로필 수정</EditButton>
+        <EditButton onClick={handleEditClick}>닉네임 수정</EditButton>
+        {isEdit && <MyInfoModal user={userInfo} isEditClick={setIsEdit} />}
       </InfoWrap>
       <Hr></Hr>
       <Outlet />
